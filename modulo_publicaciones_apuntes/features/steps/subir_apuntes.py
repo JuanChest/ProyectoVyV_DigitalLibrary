@@ -2,7 +2,7 @@ import behave.runner
 from behave import *
 from django.contrib.auth.models import User
 
-from modulo_publicaciones_apuntes.models import PerfilEstudiante
+from modulo_usuarios.models import PerfilEstudiante
 
 use_step_matcher("parse")
 

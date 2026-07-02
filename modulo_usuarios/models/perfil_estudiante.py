@@ -19,23 +19,57 @@ class PerfilEstudiante(models.Model):
     ira = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="IRA")
     email_contacto = models.EmailField(blank=True, null=True, verbose_name="Email de Contacto")
     puntos_prestigio = models.IntegerField(default=0, verbose_name="Puntos de Prestigio")
-    rango = models.CharField(max_length=50, default="MAESTRO", verbose_name="Rango")
+
+    @property
+    def rango(self):
+        """
+        Regla de negocio CP02: el rango se deriva exclusivamente del puntaje.
+        Fuente única de verdad: puntos_prestigio.
+        """
+        if self.puntos_prestigio >= 3000:
+            return "PhD"
+        elif self.puntos_prestigio >= 700:
+            return "Ingeniero"
+        elif self.puntos_prestigio >= 300:
+            return "Tecnólogo"
+        return "Prepo"
+
+    seguidores = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='siguiendo',
+        blank=True,
+        verbose_name="Seguidores"
+    )
+
+    @property
+    def total_apuntes(self):
+        """
+        Cuenta los apuntes publicados por este estudiante.
+        Requiere que el modelo Apunte tenga: autor = FK(PerfilEstudiante)
+        Si el related_name es distinto, ajusta 'apuntes' aquí.
+        """
+        return self.apuntes.count()
 
     def __str__(self):
-        return f"Perfil de {self.usuario.username}"
+        return f"{self.usuario.username} [{self.rango}] — {self.puntos_prestigio} pts"
 
 # SIGNAL: Crear perfil automáticamente
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):
     """
     Esta función se ejecuta automáticamente después de guardar un User.
-    Si el usuario es NUEVO (created=True), crea su perfil.
+    Evita colisiones con el panel de administración usando get_or_create.
     """
     if created:
-        PerfilEstudiante.objects.create(
+        # get_or_create busca si ya existe un perfil asociado al usuario;
+        # si ya existe (creado por el admin inline), no hace nada. Si no, lo crea de forma segura.
+        PerfilEstudiante.objects.get_or_create(
             usuario=instance,
-            carrera="No especificada",  # Valor por defecto
-            semestre_actual=1,
+            defaults={
+                'carrera': "No especificada",
+                'semestre_actual': 1,
+            }
         )
 
 @receiver(post_save, sender=User)

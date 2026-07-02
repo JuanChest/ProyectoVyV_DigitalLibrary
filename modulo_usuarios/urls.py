@@ -10,4 +10,5 @@ urlpatterns = [
     path('perfil_usuario/', PerfilDetailView.as_view(template_name='usuarios/perfil_usuario.html'), name='perfil_usuario'),
     path('perfil_usuario/<int:pk>/editar/', PerfilUpdateView.as_view(template_name='usuarios/perfil_usuario_edicion.html'),
          name='editar_perfil'),
+
 ]

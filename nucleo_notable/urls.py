@@ -15,6 +15,7 @@ urlpatterns = [
 
     # modulo_mis apuntes
     path('mis_apuntes/', include('modulo_mis_apuntes.urls')),
+
 ]
 
 if settings.DEBUG:

@@ -215,3 +215,23 @@
         height: 60vh;
     }
 }
+.inicio-layout {
+    display: flex !important;
+    gap: 24px;                  /* Espacio más estilizado y compacto */
+    max-width: 1140px;          /* Limitamos el ancho total para que no se vea gigante */
+    margin: 0 auto 40px auto;   /* Centra todo el contenedor en la pantalla */
+    padding: 0 40px;            /* Controla la separación respecto a los bordes */
+    align-items: flex-start;
+}
+.contenedor-apuntes {
+    flex: 1 !important;
+    background-color: var(--color-white);
+    padding: 24px !important;    /* Bajamos de 40px a 24px para reducir el espacio vacío */
+    border-radius: var(--br-20);
+    box-shadow: var(--shadow-drop);
+    display: grid;
+    /* Reducimos el tamaño base de la tarjeta (de 180px a 160px) para que entren más ordenadas */
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;                   /* Separación interna más estrecha entre tarjetas */
+    margin: 0 !important;
+}

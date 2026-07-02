@@ -3,6 +3,7 @@
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/apunte_card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ranking.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -11,11 +12,18 @@
         <h3>Explora los apuntes más vistos y mejor valorados por la comunidad.</h3>
     </section>
 
-<section class="contenedor-apuntes">
-        {% for apunte in apuntes %}
-            {% include 'partials/apunte_card.html' with apunte=apunte es_propio=False %}
-        {% empty %}
-            <p>Aún no tienes apuntes publicados. ¡Sube el primero!</p>
-        {% endfor %}
-    </section>
+    <div class="inicio-layout" style="display: flex !important; gap: 30px; margin: 0 60px 60px 60px; align-items: flex-start;">
+
+        <section class="contenedor-apuntes" style="flex: 1 !important; margin: 0 !important;">
+            {% for apunte in apuntes %}
+                {% include 'partials/apunte_card.html' with apunte=apunte es_propio=False %}
+            {% empty %}
+                <p>Aún no tienes apuntes publicados. ¡Sube el primero!</p>
+            {% endfor %}
+        </section>
+
+        <aside class="sidebar-section" style="width: 320px !important; flex-shrink: 0 !important;">
+            {% include 'usuarios/_ranking_sidebar.html' %}
+        </aside>
+    </div>
 {% endblock %}
